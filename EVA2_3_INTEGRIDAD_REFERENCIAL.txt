@@ -1,0 +1,329 @@
+EVA2_3_INTEGRIDAD_REFERENCIAL
+
+MySQL Shell 8.0.38
+
+Copyright (c) 2016, 2024, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 11
+Server version: 8.0.39 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > show satabases;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'satabases' at line 1
+ MySQL  localhost:3306 ssl  SQL > show databases;
++--------------------+
+| Database           |
++--------------------+
+| company            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| tbd_e1             |
+| tbd_e2             |
+| world              |
++--------------------+
+9 rows in set (0.0209 sec)
+ MySQL  localhost:3306 ssl  SQL > use tbd_e2;
+Default schema set to `tbd_e2`.
+Fetching global names, object names from `tbd_e2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > show create table factura;
++---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table   | Create Table
+
+                                                                                                     |
++---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| factura | CREATE TABLE `factura` (
+  `folio` int NOT NULL AUTO_INCREMENT,
+  `idCliente` int NOT NULL,
+  PRIMARY KEY (`folio`),
+  KEY `idCliente` (`idCliente`),
+  CONSTRAINT `factura_ibfk_1` FOREIGN KEY (`idCliente`) REFERENCES `cliente` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0032 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > create table factura_detalle(
+                                       -> id int key auto_increment,
+                                       -> idFactura int not null,
+                                       -> idProducto int not null,
+                                       -> cantidad int not null,
+                                       -> constraint foreign key(idFactura) references factura(folio));
+Query OK, 0 rows affected (0.1113 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > show create table factura_detalle;
++-----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table           | Create Table
+
+                                                                                                                            |
++-----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| factura_detalle | CREATE TABLE `factura_detalle` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `idFactura` int NOT NULL,
+  `idProducto` int NOT NULL,
+  `cantidad` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idFactura` (`idFactura`),
+  CONSTRAINT `factura_detalle_ibfk_1` FOREIGN KEY (`idFactura`) REFERENCES `factura` (`folio`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0246 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > drop table factura_detalle;
+Query OK, 0 rows affected (0.0463 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > create table factura_detalle( id int key auto_increment, idFactura int not null, idProducto int not null, cantidad int not null, constraint foreign key(idFactura) references factura(folio) on delete cascade on update cascade);
+Query OK, 0 rows affected (0.0957 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > show create table factura_detalle;
++-----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table           | Create Table
+
+
+                           |
++-----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| factura_detalle | CREATE TABLE `factura_detalle` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `idFactura` int NOT NULL,
+  `idProducto` int NOT NULL,
+  `cantidad` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idFactura` (`idFactura`),
+  CONSTRAINT `factura_detalle_ibfk_1` FOREIGN KEY (`idFactura`) REFERENCES `factura` (`folio`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci |
++-----------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.0040 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > insert into factura_detalle(idFactura, idProducto, cantidad) values(8, 1, 10), (8, 2, 5), (8, 3, 10);
+ERROR: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`tbd_e2`.`factura_detalle`, CONSTRAINT `factura_detalle_ibfk_1` FOREIGN KEY (`idFactura`) REFERENCES `factura` (`folio`) ON DELETE CASCADE ON UPDATE CASCADE)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from factura;
++-------+-----------+
+| folio | idCliente |
++-------+-----------+
+|     9 |         6 |
+|    10 |         6 |
+|    11 |         7 |
+|    12 |         7 |
+|    13 |         7 |
++-------+-----------+
+5 rows in set (0.0041 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > insert into factura_detalle(idFactura, idProducto, cantidad) values(9, 1, 10), (9, 2, 5), (9, 3, 10);
+Query OK, 3 rows affected (0.0252 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * factura_detalle;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'factura_detalle' at line 1
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from factura_detalle;
++----+-----------+------------+----------+
+| id | idFactura | idProducto | cantidad |
++----+-----------+------------+----------+
+|  4 |         9 |          1 |       10 |
+|  5 |         9 |          2 |        5 |
+|  6 |         9 |          3 |       10 |
++----+-----------+------------+----------+
+3 rows in set (0.0021 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from factura where folio = 9;
++-------+-----------+
+| folio | idCliente |
++-------+-----------+
+|     9 |         6 |
++-------+-----------+
+1 row in set (0.0019 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from cliente where id = 6;
++----+--------+-----------+--------------+
+| id | nombre | apellidos | rfc          |
++----+--------+-----------+--------------+
+|  6 | Juan   | Perez     | DDFF14785239 |
++----+--------+-----------+--------------+
+1 row in set (0.0040 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * cliente;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cliente' at line 1
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from cliente;
++----+--------+-----------+--------------+
+| id | nombre | apellidos | rfc          |
++----+--------+-----------+--------------+
+|  6 | Juan   | Perez     | DDFF14785239 |
+|  7 | XXXXX  | YYYYY     | SDFG12365478 |
++----+--------+-----------+--------------+
+2 rows in set (0.0013 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > update cliente set id = 20 where id = 6;
+Query OK, 1 row affected (0.0070 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from factura;
++-------+-----------+
+| folio | idCliente |
++-------+-----------+
+|    11 |         7 |
+|    12 |         7 |
+|    13 |         7 |
+|     9 |        20 |
+|    10 |        20 |
++-------+-----------+
+5 rows in set (0.0016 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from factura_detalle;
++----+-----------+------------+----------+
+| id | idFactura | idProducto | cantidad |
++----+-----------+------------+----------+
+|  4 |         9 |          1 |       10 |
+|  5 |         9 |          2 |        5 |
+|  6 |         9 |          3 |       10 |
++----+-----------+------------+----------+
+3 rows in set (0.0016 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from factura where folio = 9;
++-------+-----------+
+| folio | idCliente |
++-------+-----------+
+|     9 |        20 |
++-------+-----------+
+1 row in set (0.0018 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from cliente where id = 20;
++----+--------+-----------+--------------+
+| id | nombre | apellidos | rfc          |
++----+--------+-----------+--------------+
+| 20 | Juan   | Perez     | DDFF14785239 |
++----+--------+-----------+--------------+
+1 row in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > delete from cliente where id = 20;
+Query OK, 1 row affected (0.0255 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from cliente;
++----+--------+-----------+--------------+
+| id | nombre | apellidos | rfc          |
++----+--------+-----------+--------------+
+|  7 | XXXXX  | YYYYY     | SDFG12365478 |
++----+--------+-----------+--------------+
+1 row in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from factura;
++-------+-----------+
+| folio | idCliente |
++-------+-----------+
+|    11 |         7 |
+|    12 |         7 |
+|    13 |         7 |
++-------+-----------+
+3 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from factura_detalle;
+Empty set (0.0014 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > create table producto(id int key auto_increment, nombre varchar(50) not null, precio decimal(1,2) not null);
+ERROR: 1427 (42000): For float(M,D), double(M,D) or decimal(M,D), M must be >= D (column 'precio').
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > create table producto(id int key auto_increment, nombre varchar(50) not null, precio decimal(10,2) not null);
+Query OK, 0 rows affected (0.0560 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > insert into producto(nombre, precio) values("Elote", 20), ("Nachos", 50), ("iPhone", 25);
+Query OK, 3 rows affected (0.0290 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from producto;
++----+--------+--------+
+| id | nombre | precio |
++----+--------+--------+
+|  1 | Elote  |  20.00 |
+|  2 | Nachos |  50.00 |
+|  3 | iPhone |  25.00 |
++----+--------+--------+
+3 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > desc factura_detalle;
++------------+------+------+-----+---------+----------------+
+| Field      | Type | Null | Key | Default | Extra          |
++------------+------+------+-----+---------+----------------+
+| id         | int  | NO   | PRI | NULL    | auto_increment |
+| idFactura  | int  | NO   | MUL | NULL    |                |
+| idProducto | int  | NO   |     | NULL    |                |
+| cantidad   | int  | NO   |     | NULL    |                |
++------------+------+------+-----+---------+----------------+
+4 rows in set (0.0039 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > alter table factura_detalle add constraint foreign key(idProducto) references producto(id) on delete cascade on update cascade;
+Query OK, 0 rows affected (0.2028 sec)
+
+Records: 0  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > insert into factura_detalle(idFactura, idProducto, cantidad) values(11, 1, 50), (10, 2, 25), (10, 3, 100);
+ERROR: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`tbd_e2`.`factura_detalle`, CONSTRAINT `factura_detalle_ibfk_1` FOREIGN KEY (`idFactura`) REFERENCES `factura` (`folio`) ON DELETE CASCADE ON UPDATE CASCADE)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > desc factura_detalle;
++------------+------+------+-----+---------+----------------+
+| Field      | Type | Null | Key | Default | Extra          |
++------------+------+------+-----+---------+----------------+
+| id         | int  | NO   | PRI | NULL    | auto_increment |
+| idFactura  | int  | NO   | MUL | NULL    |                |
+| idProducto | int  | NO   | MUL | NULL    |                |
+| cantidad   | int  | NO   |     | NULL    |                |
++------------+------+------+-----+---------+----------------+
+4 rows in set (0.0045 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > desc producto;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| id     | int           | NO   | PRI | NULL    | auto_increment |
+| nombre | varchar(50)   | NO   |     | NULL    |                |
+| precio | decimal(10,2) | NO   |     | NULL    |                |
++--------+---------------+------+-----+---------+----------------+
+3 rows in set (0.0039 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > show tables;
++------------------+
+| Tables_in_tbd_e2 |
++------------------+
+| cliente          |
+| factura          |
+| factura_detalle  |
+| producto         |
++------------------+
+4 rows in set (0.0032 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * factura;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'factura' at line 1
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from factura;
++-------+-----------+
+| folio | idCliente |
++-------+-----------+
+|    11 |         7 |
+|    12 |         7 |
+|    13 |         7 |
++-------+-----------+
+3 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from factura_detalle;
+Empty set (0.0024 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > insert into factura_detalle(idFactura, idProducto, cantidad) values(11, 1, 50), (10, 2, 25), (10, 3, 100);
+ERROR: 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`tbd_e2`.`factura_detalle`, CONSTRAINT `factura_detalle_ibfk_1` FOREIGN KEY (`idFactura`) REFERENCES `factura` (`folio`) ON DELETE CASCADE ON UPDATE CASCADE)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > insert into factura_detalle(idFactura, idProducto, cantidad) values(11, 1, 50), (11, 2, 25), (11, 3, 100);
+Query OK, 3 rows affected (0.0255 sec)
+
+Records: 3  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from factura_detalle;
++----+-----------+------------+----------+
+| id | idFactura | idProducto | cantidad |
++----+-----------+------------+----------+
+| 13 |        11 |          1 |       50 |
+| 14 |        11 |          2 |       25 |
+| 15 |        11 |          3 |      100 |
++----+-----------+------------+----------+
+3 rows in set (0.0019 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > delete from producto where id = 13;
+Query OK, 0 rows affected (0.0027 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from factura_detalle;
++----+-----------+------------+----------+
+| id | idFactura | idProducto | cantidad |
++----+-----------+------------+----------+
+| 13 |        11 |          1 |       50 |
+| 14 |        11 |          2 |       25 |
+| 15 |        11 |          3 |      100 |
++----+-----------+------------+----------+
+3 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from producto;
++----+--------+--------+
+| id | nombre | precio |
++----+--------+--------+
+|  1 | Elote  |  20.00 |
+|  2 | Nachos |  50.00 |
+|  3 | iPhone |  25.00 |
++----+--------+--------+
+3 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > delete from producto where id = 3;
+Query OK, 1 row affected (0.0251 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > select * from factura_detalle;
++----+-----------+------------+----------+
+| id | idFactura | idProducto | cantidad |
++----+-----------+------------+----------+
+| 13 |        11 |          1 |       50 |
+| 14 |        11 |          2 |       25 |
++----+-----------+------------+----------+
+2 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL >
