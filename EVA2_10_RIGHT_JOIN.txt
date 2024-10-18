@@ -1,0 +1,202 @@
+EVA2_10_RIGHT_JOIN
+
+MySQL Shell 8.0.38
+
+Copyright (c) 2016, 2024, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL >  \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 12
+Server version: 8.0.39 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > use tbd_e2;
+Default schema set to `tbd_e2`.
+Fetching global names, object names from `tbd_e2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > show tables;
++------------------+
+| Tables_in_tbd_e2 |
++------------------+
+| cliente          |
+| factura          |
+| factura_detalle  |
+| producto         |
+| tablaa           |
+| tablab           |
++------------------+
+6 rows in set (0.0208 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.nombre, a.apellidos, sum(c.cantidad * d.precio) as total FROM cliente a LEFT JOIN factura b on a.id = b.idcliente LEFT JOIN factura_detalle c on b.folio = c.idfactura LEFT JOIN producto d on c.idproducto = d.id GROUP BY a.id ORDER BY a.apellidos, a.nombre;
++--------+-----------+---------+
+| nombre | apellidos | total   |
++--------+-----------+---------+
+| Pedro  | Lopez     |    NULL |
+| Juana  | Osorio    | 9820.00 |
+| Juan   | Perez     |  690.00 |
+| Jorge  | Ramos     |    NULL |
+| Luisa  | Robles    |    NULL |
+| XXXXX  | YYYYY     | 2250.00 |
++--------+-----------+---------+
+6 rows in set (0.0041 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > desc factura;
++-----------+------+------+-----+---------+----------------+
+| Field     | Type | Null | Key | Default | Extra          |
++-----------+------+------+-----+---------+----------------+
+| folio     | int  | NO   | PRI | NULL    | auto_increment |
+| idCliente | int  | NO   | MUL | NULL    |                |
++-----------+------+------+-----+---------+----------------+
+2 rows in set (0.0044 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > desc factura_detalle;
++------------+------+------+-----+---------+----------------+
+| Field      | Type | Null | Key | Default | Extra          |
++------------+------+------+-----+---------+----------------+
+| id         | int  | NO   | PRI | NULL    | auto_increment |
+| idFactura  | int  | NO   | MUL | NULL    |                |
+| idProducto | int  | NO   | MUL | NULL    |                |
+| cantidad   | int  | NO   |     | NULL    |                |
++------------+------+------+-----+---------+----------------+
+4 rows in set (0.0045 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > desc cliente;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| id        | int         | NO   | PRI | NULL    | auto_increment |
+| nombre    | varchar(50) | NO   |     | NULL    |
+  |
+| apellidos | varchar(50) | NO   |     | NULL    |
+  |
+| rfc       | varchar(13) | NO   |     | NULL    |
+  |
++-----------+-------------+------+-----+---------+----------------+
+4 rows in set (0.0231 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > desc producto;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra
+ |
++--------+---------------+------+-----+---------+----------------+
+| id     | int           | NO   | PRI | NULL    | auto_increment |
+| nombre | varchar(50)   | NO   |     | NULL    |
+ |
+| precio | decimal(10,2) | NO   |     | NULL    |
+ |
++--------+---------------+------+-----+---------+----------------+
+3 rows in set (0.0034 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.nombre, a.apellidos, ifnull(sum(c.cantidad * d.precio),0) as total FROM cliente a LEFT JOIN factura b on a.id = b.idcliente LEFT JOIN factura_detalle c on b.folio = c.idfactura LEFT JOIN producto d on c.idproducto = d.id GROUP BY a.id ORDER BY a.apellidos, a.nombre;
++--------+-----------+---------+
+| nombre | apellidos | total   |
++--------+-----------+---------+
+| Pedro  | Lopez     |    0.00 |
+| Juana  | Osorio    | 9820.00 |
+| Juan   | Perez     |  690.00 |
+| Jorge  | Ramos     |    0.00 |
+| Luisa  | Robles    |    0.00 |
+| XXXXX  | YYYYY     | 2250.00 |
++--------+-----------+---------+
+6 rows in set (0.0032 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.nombre, ifnull(sum(b.cantidad), 0) as total, IFNULL(sum(b.cantidad * a.precio), 0) as total_ventas FROM producto a LEFT JOIN factura_detalle b on a.id = b.idproducto GROUP BY a.id ORDER BY a.nombre;
++------------+-------+--------------+
+| nombre     | total | total_ventas |
++------------+-------+--------------+
+| Android    |    11 |      6600.00 |
+| Elote      |    65 |      1300.00 |
+| Enchiladas |     1 |       150.00 |
+| Helado     |    11 |      1100.00 |
+| iPhones    |     1 |       500.00 |
+| Nachos     |    35 |      1750.00 |
+| Tacos      |    17 |      1360.00 |
++------------+-------+--------------+
+7 rows in set (0.0032 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT * FROM tablaa;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | A      |
+|  2 | B      |
+|  3 | C      |
+|  4 | D      |
++----+--------+
+4 rows in set (0.0233 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT * FROM tablab;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | X      |
+|  2 | Y      |
+|  3 | Z      |
+|  4 | A      |
+|  5 | B      |
++----+--------+
+5 rows in set (0.0363 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > create table tablabb( id int key auto_increment, idtablaa int,  nombre varchar(50));
+Query OK, 0 rows affected (0.0998 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT * FROM tablaa;
++----+--------+
+| id | nombre |
++----+--------+
+|  1 | A      |
+|  2 | B      |
+|  3 | C      |
+|  4 | D      |
++----+--------+
+4 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > INSERT INTO tablabb(idtablaa, nombre) values(1, "xxxx"), (2, "yyyy"), (2, "zzzz"), (3, "dddd"), (null, "rrrr"), (null, "tttt");
+Query OK, 6 rows affected (0.0097 sec)
+
+Records: 6  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.nombre, b.nombre FROM tablaa a LEFT JOIN tablabb b on a.id = b.idtablaa;
++--------+--------+
+| nombre | nombre |
++--------+--------+
+| A      | xxxx   |
+| B      | zzzz   |
+| B      | yyyy   |
+| C      | dddd   |
+| D      | NULL   |
++--------+--------+
+5 rows in set (0.0018 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.nombre, b.nombre FROM tablaa a RIGHT JOIN tablabb b on a.id = b.idtablaa;
++--------+--------+
+| nombre | nombre |
++--------+--------+
+| A      | xxxx   |
+| B      | yyyy   |
+| B      | zzzz   |
+| C      | dddd   |
+| NULL   | rrrr   |
+| NULL   | tttt   |
++--------+--------+
+6 rows in set (0.0017 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.nombre, a.apellidos, b.folio FROM cliente a LEFT JOIN factura b ON a.id = b.idcliente;
++--------+-----------+-------+
+| nombre | apellidos | folio |
++--------+-----------+-------+
+| XXXXX  | YYYYY     |    11 |
+| XXXXX  | YYYYY     |    12 |
+| XXXXX  | YYYYY     |    13 |
+| Juan   | Perez     |    14 |
+| Juan   | Perez     |    18 |
+| Juan   | Perez     |    19 |
+| Pedro  | Lopez     |    15 |
+| Pedro  | Lopez     |    20 |
+| Jorge  | Ramos     |  NULL |
+| Luisa  | Robles    |  NULL |
+| Juana  | Osorio    |    16 |
+| Juana  | Osorio    |    17 |
+| Juana  | Osorio    |    21 |
+| Juana  | Osorio    |    22 |
++--------+-----------+-------+
+14 rows in set (0.0017 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.nombre, a.apellidos, b.folio FROM cliente a LEFT JOIN factura b ON a.id = b.idcliente WHERE b.folio is null;
++--------+-----------+-------+
+| nombre | apellidos | folio |
++--------+-----------+-------+
+| Jorge  | Ramos     |  NULL |
+| Luisa  | Robles    |  NULL |
++--------+-----------+-------+
+2 rows in set (0.0016 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL >
+
