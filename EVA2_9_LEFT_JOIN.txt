@@ -1,0 +1,315 @@
+EVA2_9_LEFT_JOIN
+
+MySQL Shell 8.0.38
+
+Copyright (c) 2016, 2024, Oracle and/or its affiliates.
+Oracle is a registered trademark of Oracle Corporation and/or its affiliates.
+Other names may be trademarks of their respective owners.
+
+Type '\help' or '\?' for help; '\quit' to exit.
+ MySQL  JS > \sql
+Switching to SQL mode... Commands end with ;
+ MySQL  SQL > \connect --mc root@localhost
+Creating a Classic session to 'root@localhost'
+Fetching global names for auto-completion... Press ^C to stop.
+Your MySQL connection id is 11
+Server version: 8.0.39 MySQL Community Server - GPL
+No default schema selected; type \use <schema> to set one.
+ MySQL  localhost:3306 ssl  SQL > use tbd_e2;2
+Default schema set to `tbd_e2`.
+Fetching global names, object names from `tbd_e2` for auto-completion... Press ^C to stop.
+                               -> use tbd_e2;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '2
+use tbd_e2' at line 1
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > use tbd_e2;
+Default schema set to `tbd_e2`.
+Fetching global names, object names from `tbd_e2` for auto-completion... Press ^C to stop.
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > insert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Pereinsert into cliente(nombre, apellidos, rfc) values("Juan", "Perez", "AWSE1478523"),("Pedro", "Lopez", "LOIK14785236"),("Jorge", insert into cliente(nombre, apellidos, rfc) values("Juan", "Perez", "AWSE1478523"),("Pedro", "Lopez", "LOIK14785236"),("Jorge", insert into cliente(nombre, apellidos, rfc) values("Juan", "Perez", "AWSE1478523"),("Pedro", "Lopez", "LOIK14785236"),("Jorge", insert into cliente(nombre, apellidos, rfc) values("Juan", "Perez", "AWSE1478523"),("Pedro", "Lopez", "LOIK14785236"),("Jorge", "Ramos", "WERT01236574"),^C
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > insert into cliente(nombre, apellidos, rfc) values("Juan", "Perez", "AWSE1478523"), ("Pedro", "Lopez", "LOIK14785236"), ("Jorge", "Ramos", "WERT01236574"), ("Luisa", "Robles", "PLOK32165478"), ("Juana", "Osorio", "CVBN25896314");
+Query OK, 5 rows affected (0.0908 sec)
+
+Records: 5  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT * FROM cliente;
+
++----+--------+-----------+--------------+
+| id | nombre | apellidos | rfc          |
++----+--------+-----------+--------------+
+|  7 | XXXXX  | YYYYY     | SDFG12365478 |
+| 21 | Juan   | Perez     | AWSE1478523  |
+| 22 | Pedro  | Lopez     | LOIK14785236 |
+| 23 | Jorge  | Ramos     | WERT01236574 |
+| 24 | Luisa  | Robles    | PLOK32165478 |
+| 25 | Juana  | Osorio    | CVBN25896314 |
++----+--------+-----------+--------------+
+6 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT * FROM factura;
+
++-------+-----------+
+| folio | idCliente |
++-------+-----------+
+|    11 |         7 |
+|    12 |         7 |
+|    13 |         7 |
++-------+-----------+
+3 rows in set (0.0217 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > INSERT INTO factura(idCliente) values(21), (22), (25), (25), (21), (21), (22), (25), (25);
+Query OK, 9 rows affected (0.0275 sec)
+
+Records: 9  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT * from producto;
++----+--------+--------+
+| id | nombre | precio |
++----+--------+--------+
+|  1 | Elote  |  20.00 |
+|  2 | Nachos |  50.00 |
++----+--------+--------+
+2 rows in set (0.0360 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > INSERT INTO producto( nombre, precio) values("Helado", 100), ("Tacos", 80), ("iPhones", 500), ("Android", 600), ("Enchiladas", 150);
+Query OK, 5 rows affected (0.0252 sec)
+
+Records: 5  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT * FROM producto;
++----+------------+--------+
+| id | nombre     | precio |
++----+------------+--------+
+|  1 | Elote      |  20.00 |
+|  2 | Nachos     |  50.00 |
+|  4 | Helado     | 100.00 |
+|  5 | Tacos      |  80.00 |
+|  6 | iPhones    | 500.00 |
+|  7 | Android    | 600.00 |
+|  8 | Enchiladas | 150.00 |
++----+------------+--------+
+7 rows in set (0.0013 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT * FROM factura;
+
++-------+-----------+
+| folio | idCliente |
++-------+-----------+
+|    11 |         7 |
+|    12 |         7 |
+|    13 |         7 |
+|    14 |        21 |
+|    18 |        21 |
+|    19 |        21 |
+|    15 |        22 |
+|    20 |        22 |
+|    16 |        25 |
+|    17 |        25 |
+|    21 |        25 |
+|    22 |        25 |
++-------+-----------+
+12 rows in set (0.0013 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > desc factura_detalle;
++------------+------+------+-----+---------+----------------+
+| Field      | Type | Null | Key | Default | Extra          |
++------------+------+------+-----+---------+----------------+
+| id         | int  | NO   | PRI | NULL    | auto_increment |
+| idFactura  | int  | NO   | MUL | NULL    |                |
+| idProducto | int  | NO   | MUL | NULL    |                |
+| cantidad   | int  | NO   |     | NULL    |                |
++------------+------+------+-----+---------+----------------+
+4 rows in set (0.0230 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT * from factura;
+
++-------+-----------+
+| folio | idCliente |
++-------+-----------+
+|    11 |         7 |
+|    12 |         7 |
+|    13 |         7 |
+|    14 |        21 |
+|    18 |        21 |
+|    19 |        21 |
+|    15 |        22 |
+|    20 |        22 |
+|    16 |        25 |
+|    17 |        25 |
+|    21 |        25 |
+|    22 |        25 |
++-------+-----------+
+12 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT * from producto;
++----+------------+--------+
+| id | nombre     | precio |
++----+------------+--------+
+|  1 | Elote      |  20.00 |
+|  2 | Nachos     |  50.00 |
+|  4 | Helado     | 100.00 |
+|  5 | Tacos      |  80.00 |
+|  6 | iPhones    | 500.00 |
+|  7 | Android    | 600.00 |
+|  8 | Enchiladas | 150.00 |
++----+------------+--------+
+7 rows in set (0.0011 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > INSERT INTO factura_detalle(idFactura, idproducto, cantidad) values (14, 1, 5), (14, 4, 2), (14, 8, 1), (18, 5, 3), (16, 7, 4), (16, 4, 3), (16, 1, 10), (22, 2, 10), (22, 4, 6), (22, 5, 6), (17, 5, 8), (17, 6, 1), (17, 7, 7);
+Query OK, 13 rows affected (0.0447 sec)
+
+Records: 13  Duplicates: 0  Warnings: 0
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > desc cliente;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| id        | int         | NO   | PRI | NULL    | auto_increment |
+| nombre    | varchar(50) | NO   |     | NULL    |
+  |
+| apellidos | varchar(50) | NO   |     | NULL    |
+  |
+| rfc       | varchar(13) | NO   |     | NULL    |
+  |
++-----------+-------------+------+-----+---------+----------------+
+4 rows in set (0.0049 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > desc factura;
++-----------+------+------+-----+---------+----------------+
+| Field     | Type | Null | Key | Default | Extra          |
++-----------+------+------+-----+---------+----------------+
+| folio     | int  | NO   | PRI | NULL    | auto_increment |
+| idCliente | int  | NO   | MUL | NULL    |                |
++-----------+------+------+-----+---------+----------------+
+2 rows in set (0.0046 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.nombre, a.apellidos, count(*) as total from cliente a inner JOIN factura b on a.id = b.idCliente GROUP BY a.id ORDER BY apellidos, nombre;
++--------+-----------+-------+
+| nombre | apellidos | total |
++--------+-----------+-------+
+| Pedro  | Lopez     |     2 |
+| Juana  | Osorio    |     4 |
+| Juan   | Perez     |     3 |
+| XXXXX  | YYYYY     |     3 |
++--------+-----------+-------+
+4 rows in set (0.0269 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.nombre, a.apellidos, count(*) as total FROM cliente a LEFT JOIN factura b on a.id = b.idcliente GROUP BY a.id ORDER BY apellidos, nombre;
++--------+-----------+-------+
+| nombre | apellidos | total |
++--------+-----------+-------+
+| Pedro  | Lopez     |     2 |
+| Juana  | Osorio    |     4 |
+| Juan   | Perez     |     3 |
+| Jorge  | Ramos     |     1 |
+| Luisa  | Robles    |     1 |
+| XXXXX  | YYYYY     |     3 |
++--------+-----------+-------+
+6 rows in set (0.0027 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.nombre, a.apellidos, count(b.folio) as total FROM cliente a LEFT JOIN factura b on a.id = b.idcliente GROUP BY a.id ORDER BY apellidos, nombre;
++--------+-----------+-------+
+| nombre | apellidos | total |
++--------+-----------+-------+
+| Pedro  | Lopez     |     2 |
+| Juana  | Osorio    |     4 |
+| Juan   | Perez     |     3 |
+| Jorge  | Ramos     |     0 |
+| Luisa  | Robles    |     0 |
+| XXXXX  | YYYYY     |     3 |
++--------+-----------+-------+
+6 rows in set (0.0014 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > desc factura_detalle;
++------------+------+------+-----+---------+----------------+
+| Field      | Type | Null | Key | Default | Extra          |
++------------+------+------+-----+---------+----------------+
+| id         | int  | NO   | PRI | NULL    | auto_increment |
+| idFactura  | int  | NO   | MUL | NULL    |                |
+| idProducto | int  | NO   | MUL | NULL    |                |
+| cantidad   | int  | NO   |     | NULL    |                |
++------------+------+------+-----+---------+----------------+
+4 rows in set (0.0060 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > desc producto;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra
+ |
++--------+---------------+------+-----+---------+----------------+
+| id     | int           | NO   | PRI | NULL    | auto_increment |
+| nombre | varchar(50)   | NO   |     | NULL    |
+ |
+| precio | decimal(10,2) | NO   |     | NULL    |
+ |
++--------+---------------+------+-----+---------+----------------+
+3 rows in set (0.0046 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT * from factura_detalle;
++----+-----------+------------+----------+
+| id | idFactura | idProducto | cantidad |
++----+-----------+------------+----------+
+| 13 |        11 |          1 |       50 |
+| 14 |        11 |          2 |       25 |
+| 16 |        14 |          1 |        5 |
+| 17 |        14 |          4 |        2 |
+| 18 |        14 |          8 |        1 |
+| 19 |        18 |          5 |        3 |
+| 20 |        16 |          7 |        4 |
+| 21 |        16 |          4 |        3 |
+| 22 |        16 |          1 |       10 |
+| 23 |        22 |          2 |       10 |
+| 24 |        22 |          4 |        6 |
+| 25 |        22 |          5 |        6 |
+| 26 |        17 |          5 |        8 |
+| 27 |        17 |          6 |        1 |
+| 28 |        17 |          7 |        7 |
++----+-----------+------------+----------+
+15 rows in set (0.0015 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > DESC producto;
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra
+ |
++--------+---------------+------+-----+---------+----------------+
+| id     | int           | NO   | PRI | NULL    | auto_increment |
+| nombre | varchar(50)   | NO   |     | NULL    |
+ |
+| precio | decimal(10,2) | NO   |     | NULL    |
+ |
++--------+---------------+------+-----+---------+----------------+
+3 rows in set (0.0050 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.idfactura, b.nombre, a.cantidad, b.precio FROM factura_detalle a INNER JOIN producto b on a.idproducto = b.id;
++-----------+------------+----------+--------+
+| idfactura | nombre     | cantidad | precio |
++-----------+------------+----------+--------+
+|        11 | Elote      |       50 |  20.00 |
+|        14 | Elote      |        5 |  20.00 |
+|        16 | Elote      |       10 |  20.00 |
+|        11 | Nachos     |       25 |  50.00 |
+|        22 | Nachos     |       10 |  50.00 |
+|        14 | Helado     |        2 | 100.00 |
+|        16 | Helado     |        3 | 100.00 |
+|        22 | Helado     |        6 | 100.00 |
+|        18 | Tacos      |        3 |  80.00 |
+|        22 | Tacos      |        6 |  80.00 |
+|        17 | Tacos      |        8 |  80.00 |
+|        17 | iPhones    |        1 | 500.00 |
+|        16 | Android    |        4 | 600.00 |
+|        17 | Android    |        7 | 600.00 |
+|        14 | Enchiladas |        1 | 150.00 |
++-----------+------------+----------+--------+
+15 rows in set (0.0018 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.idfactura, b.nombre, a.cantidad, b.precio, a.cantidad * b.precio as total FROM factura_detalle a  INNER JOIN producto b on a.idproducto = b.id;
++-----------+------------+----------+--------+---------+
+| idfactura | nombre     | cantidad | precio | total   |
++-----------+------------+----------+--------+---------+
+|        11 | Elote      |       50 |  20.00 | 1000.00 |
+|        14 | Elote      |        5 |  20.00 |  100.00 |
+|        16 | Elote      |       10 |  20.00 |  200.00 |
+|        11 | Nachos     |       25 |  50.00 | 1250.00 |
+|        22 | Nachos     |       10 |  50.00 |  500.00 |
+|        14 | Helado     |        2 | 100.00 |  200.00 |
+|        16 | Helado     |        3 | 100.00 |  300.00 |
+|        22 | Helado     |        6 | 100.00 |  600.00 |
+|        18 | Tacos      |        3 |  80.00 |  240.00 |
+|        22 | Tacos      |        6 |  80.00 |  480.00 |
+|        17 | Tacos      |        8 |  80.00 |  640.00 |
+|        17 | iPhones    |        1 | 500.00 |  500.00 |
+|        16 | Android    |        4 | 600.00 | 2400.00 |
+|        17 | Android    |        7 | 600.00 | 4200.00 |
+|        14 | Enchiladas |        1 | 150.00 |  150.00 |
++-----------+------------+----------+--------+---------+
+15 rows in set (0.0021 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.nombre, a.apellidos, sum(c.cantidad * d.precio) as total FROM cliente a LEFT JOIN factura b on a.id = b.idcliente LEFT JOIN factura_detalle con b.folio = c.idfactura LEFT JOIN producto d on c.idproducto = d.id GROUP BY a.id ORDER BY a.apellidos, a.nombre;
+ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'b.folio = c.idfactura LEFT JOIN producto d on c.idproducto = d.id GROUP BY a.id ' at line 1
+ MySQL  localhost:3306 ssl  tbd_e2  SQL > SELECT a.nombre, a.apellidos, sum(c.cantidad * d.precio) as total FROM cliente a LEFT JOIN factura b on a.id = b.idcliente LEFT JOIN factura_detalle c on b.folio = c.idfactura LEFT JOIN producto d on c.idproducto = d.id GROUP BY a.id ORDER BY a.apellidos, a.nombre;
++--------+-----------+---------+
+| nombre | apellidos | total   |
++--------+-----------+---------+
+| Pedro  | Lopez     |    NULL |
+| Juana  | Osorio    | 9820.00 |
+| Juan   | Perez     |  690.00 |
+| Jorge  | Ramos     |    NULL |
+| Luisa  | Robles    |    NULL |
+| XXXXX  | YYYYY     | 2250.00 |
++--------+-----------+---------+
+6 rows in set (0.0028 sec)
+ MySQL  localhost:3306 ssl  tbd_e2  SQL >
